@@ -1,5 +1,45 @@
 # Semana_TEC_Reto
-Codigo para reto semanta tec
+Código para reto semana Tec
+
+# 🐍 Snake - Juego de la Serpiente
+
+Este proyecto es una modificación del juego original **Snake** en Python (de la librería `freegames`).  
+Se realizaron cambios para hacerlo más dinámico y desafiante.
+
+---
+
+## 🕹 Controles
+
+- ⬅️ **Izquierda:** tecla `Left`
+- ➡️ **Derecha:** tecla `Right`
+- ⬆️ **Arriba:** tecla `Up`
+- ⬇️ **Abajo:** tecla `Down`
+
+---
+
+## 🔧 Modificaciones realizadas
+
+### 🎨 Colores aleatorios para la serpiente y la comida
+Se creó una lista de colores permitidos (excluyendo el rojo) y, al iniciar el juego, se seleccionan dos colores diferentes al azar para la serpiente y la comida:
+
+```python
+from random import sample
+
+available_colors = ['blue', 'green', 'yellow', 'purple', 'orange']
+snake_color, food_color = sample(available_colors, 2)
+
+### 🍎 Movimiento aleatorio de la comida
+La comida se mueve un paso a la vez de forma aleatoria dentro de los límites de la pantalla:
+
+```python
+from random import choice
+
+food_directions = [vector(10,0), vector(-10,0), vector(0,10), vector(0,-10)]
+if possible_moves:
+    move_dir = choice(possible_moves)
+    food.move(move_dir)
+
+
 # 🎯 Canon - Juego de Tiro Parabólico
 
 Este proyecto es una modificación del juego original **Cannon** en Python (de la librería `freegames`).  
