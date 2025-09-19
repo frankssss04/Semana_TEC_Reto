@@ -117,3 +117,67 @@ Game Over
 Se añadió un mensaje centrado de “GAME OVER” cuando Pacman colisiona con un fantasma, mejorando la experiencia visual y de feedback para el jugador.
 
 En conjunto, estas modificaciones permiten que el juego sea más dinámico, desafiante y visualmente organizado, logrando una experiencia más entretenida tanto en Cannon como en Pacman.
+
+
+# 🎮 Juego Paint
+
+Este repositorio contiene una versión **modificada** del juego *Paint* de la librería educativa FreeGames. Se trabajó directamente en el código para completar las funcionalidades pendientes y agregar mejoras específicas. A continuación se explica únicamente lo que se añadió o modificó en el código.
+
+---
+
+## 1) Nuevo color: Amarillo
+
+* En la sección de bindings de colores se agregó la línea:
+
+  ```python
+  onkey(lambda: color('yellow'), 'Y')
+  ```
+* Esto permite seleccionar el color amarillo al presionar la tecla **Y**.
+
+---
+
+## 2) Función `circle(start, end)`
+
+* Antes estaba vacía con un `pass`.
+* Ahora calcula el radio como la distancia entre `start` y `end`.
+* Se mueve la tortuga a `(start.x, start.y - r)` para que el círculo quede centrado.
+* Se utiliza `t.circle(r)` para dibujar y se incluye `begin_fill()` / `end_fill()` para rellenar con el color activo.
+
+---
+
+## 3) Función `rectangle(start, end)`
+
+* Antes estaba vacía con un `pass`.
+* Ahora se trazan cuatro líneas que unen las esquinas `(x1, y1)`, `(x2, y1)`, `(x2, y2)` y `(x1, y2)`.
+* Se usa `begin_fill()` / `end_fill()` para rellenar con el color activo.
+
+---
+
+## 4) Función `triangle(start, end)`
+
+* Antes estaba vacía con un `pass`.
+* Ahora dibuja un triángulo isósceles definido por:
+
+  * `A = (start.x, start.y)`
+  * `B = (end.x, start.y)`
+  * `C = ((start.x + end.x)/2, end.y)`
+* Se conecta A → B → C → A y se rellena con `begin_fill()` / `end_fill()`.
+
+---
+
+## 5) Documentación en el código
+
+* Se añadieron **docstrings** a todas las funciones explicando propósito, parámetros y comportamiento.
+* Se usaron **type hints** en las funciones principales (`line`, `square`, `circle`, `rectangle`, `triangle`, `tap`, `store`) para mayor claridad.
+
+---
+
+## Resumen de cambios en el código
+
+1. **Color amarillo agregado**.
+2. **Función circle** completada.
+3. **Función rectangle** completada.
+4. **Función triangle** completada.
+5. **Docstrings y type hints** añadidos en las funciones.
+
+Estas modificaciones cumplen con los requerimientos del ejercicio y completan el funcionamiento del juego Paint.
