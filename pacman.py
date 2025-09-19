@@ -1,15 +1,12 @@
-"""Pacman, classic arcade game.
+"""Pacman, classic arcade game — versión corregida.
 
-Exercises
-
-1. Change the board.
-2. Change the number of ghosts.
-3. Change where pacman starts.
-4. Make the ghosts faster/slower.
-5. Make the ghosts smarter.
+Mejoras:
+- Fantasmas más inteligentes (persiguen en intersecciones con algo de aleatoriedad).
+- Fantasmas más rápidos (menor delay en ontimer).
+- Tablero original y posiciones válidas.
 """
 
-from random import choice
+from random import choice, random
 from turtle import *
 
 from freegames import floor, vector
@@ -18,14 +15,17 @@ state = {'score': 0}
 path = Turtle(visible=False)
 writer = Turtle(visible=False)
 aim = vector(5, 0)
+
+# --- POSICIONES INICIALES SEGURAS ---
 pacman = vector(-40, -80)
 ghosts = [
     [vector(-180, 160), vector(5, 0)],
-    [vector(-180, -160), vector(0, 5)],
-    [vector(100, 160), vector(0, -5)],
+    [vector(100, 160), vector(-5, 0)],
+    [vector(-180, -160), vector(5, 0)],
     [vector(100, -160), vector(-5, 0)],
 ]
-# fmt: off
+
+# --- TABLERO ORIGINAL ---
 tiles = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
@@ -48,25 +48,20 @@ tiles = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ]
-# fmt: on
 
 
 def square(x, y):
-    """Draw square using path at (x, y)."""
     path.up()
     path.goto(x, y)
     path.down()
     path.begin_fill()
-
     for count in range(4):
         path.forward(20)
         path.left(90)
-
     path.end_fill()
 
 
 def offset(point):
-    """Return offset of point in tiles."""
     x = (floor(point.x, 20) + 200) / 20
     y = (180 - floor(point.y, 20)) / 20
     index = int(x + y * 20)
@@ -74,33 +69,24 @@ def offset(point):
 
 
 def valid(point):
-    """Return True if point is valid in tiles."""
     index = offset(point)
-
     if tiles[index] == 0:
         return False
-
     index = offset(point + 19)
-
     if tiles[index] == 0:
         return False
-
     return point.x % 20 == 0 or point.y % 20 == 0
 
 
 def world():
-    """Draw world using path."""
     bgcolor('black')
     path.color('blue')
-
     for index in range(len(tiles)):
         tile = tiles[index]
-
         if tile > 0:
             x = (index % 20) * 20 - 200
             y = 180 - (index // 20) * 20
             square(x, y)
-
             if tile == 1:
                 path.up()
                 path.goto(x + 10, y + 10)
@@ -108,17 +94,14 @@ def world():
 
 
 def move():
-    """Move pacman and all ghosts."""
     writer.undo()
     writer.write(state['score'])
-
     clear()
 
     if valid(pacman + aim):
         pacman.move(aim)
 
     index = offset(pacman)
-
     if tiles[index] == 1:
         tiles[index] = 2
         state['score'] += 1
@@ -131,18 +114,20 @@ def move():
     dot(20, 'yellow')
 
     for point, course in ghosts:
-        if valid(point + course):
+        if valid(point + course) and (point.x % 20 != 0 or point.y % 20 != 0):
             point.move(course)
         else:
-            options = [
-                vector(5, 0),
-                vector(-5, 0),
-                vector(0, 5),
-                vector(0, -5),
-            ]
-            plan = choice(options)
-            course.x = plan.x
-            course.y = plan.y
+            options = [vector(5, 0), vector(-5, 0), vector(0, 5), vector(0, -5)]
+            valid_options = [o for o in options if valid(point + o)]
+            reverse = vector(-course.x, -course.y)
+            non_reverse = [o for o in valid_options if not (o.x == reverse.x and o.y == reverse.y)]
+            choices = non_reverse if non_reverse else valid_options
+
+            if choices:
+                best = min(choices, key=lambda v: abs((point + v) - pacman))
+                plan = best if random() > 0.2 else choice(choices)
+                course.x, course.y = plan.x, plan.y
+                point.move(course)
 
         up()
         goto(point.x + 10, point.y + 10)
@@ -152,19 +137,22 @@ def move():
 
     for point, course in ghosts:
         if abs(pacman - point) < 20:
+            writer.goto(0, 0)
+            writer.color('white')
+            writer.write('GAME OVER', align='center', font=('Arial', 16, 'bold'))
             return
 
-    ontimer(move, 100)
+    # Fantasmas más rápidos (60 ms en lugar de 100)
+    ontimer(move, 60)
 
 
 def change(x, y):
-    """Change pacman aim if valid."""
     if valid(pacman + vector(x, y)):
         aim.x = x
         aim.y = y
 
 
-setup(420, 420, 370, 0)
+setup(420, 460, 370, 0)
 hideturtle()
 tracer(False)
 writer.goto(160, 160)
