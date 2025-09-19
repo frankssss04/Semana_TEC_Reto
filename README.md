@@ -28,6 +28,9 @@ from random import sample
 available_colors = ['blue', 'green', 'yellow', 'purple', 'orange']
 snake_color, food_color = sample(available_colors, 2)
 
+```
+---
+
 ### 🍎 Movimiento aleatorio de la comida
 La comida se mueve un paso a la vez de forma aleatoria dentro de los límites de la pantalla:
 
@@ -35,10 +38,17 @@ La comida se mueve un paso a la vez de forma aleatoria dentro de los límites de
 from random import choice
 
 food_directions = [vector(10,0), vector(-10,0), vector(0,10), vector(0,-10)]
-if possible_moves:
-    move_dir = choice(possible_moves)
-    food.move(move_dir)
+    possible_moves = []
+    for d in food_directions:
+        new_pos = food + d
+        if -200 < new_pos.x < 190 and -200 < new_pos.y < 190:
+            possible_moves.append(d)
+    if possible_moves:
+        move_dir = choice(possible_moves)
+        food.move(move_dir)
 
+```
+---
 
 # 🎯 Canon - Juego de Tiro Parabólico
 
