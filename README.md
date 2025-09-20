@@ -84,39 +84,85 @@ Se realizaron cambios para hacerlo más dinámico y convertirlo en un juego infi
              target.x = 200
              target.y = randrange(-150, 150)
      ```
-Pacman Clásico
+# 🟡 Pacman - Juego Clásico
 
-Se realizó una versión modificada del clásico juego Pacman para mejorar la jugabilidad y hacerlo más desafiante:
+Este proyecto es una modificación del **Pacman original** en Python (basado en la librería `freegames`).  
+Se realizaron cambios para hacerlo más dinámico, con tableros más ajustados y enemigos mejorados.
 
-Fantasmas más inteligentes
+---
 
-Los fantasmas ahora persiguen a Pacman de manera estratégica en intersecciones, eligiendo la dirección más cercana a Pacman con un 20% de aleatoriedad, evitando moverse hacia atrás inmediatamente.
+## 📌 Características principales
 
-Esto se logró modificando la función move() y evaluando opciones válidas en cada paso:
+- Tablero centrado y con el tamaño correcto.  
+- Ajustes en la posición inicial de todos los fantasmas.  
+- Movimiento más rápido de los fantasmas.  
+- Jugabilidad mejorada para hacerlo más desafiante.
 
+---
+
+## 🚀 Cómo ejecutar el juego
+
+1. Clona este repositorio:  
+   ```bash
+   git clone https://github.com/usuario/proyecto-pacman.git
+Entra al directorio del proyecto:
+
+bash
+Copiar código
+cd proyecto-pacman
+Ejecuta el juego:
+
+bash
+Copiar código
+python pacman.py
+🔧 Modificaciones realizadas
+Velocidad de los fantasmas:
+Se aumentó la velocidad de movimiento de los enemigos para incrementar la dificultad.
+
+Tablero:
+Ahora el tablero está centrado en pantalla y todos los fantasmas aparecen dentro del área de juego.
+
+📦 Dependencias
+Este proyecto requiere Python 3 y la librería freegames.
+Para instalarla, ejecuta:
+
+bash
+Copiar código
+pip install freegames
+
+## ⚙️ Cambios en el código
+
+---
+
+### 👻 Fantasmas más inteligentes
+```python
+Antes:
+
+# Movimiento aleatorio de los fantasmas
+plan = choice(choices)
+
+Después:
+
+python
+# Movimiento estratégico de los fantasmas hacia Pacman con 20% de aleatoriedad
 best = min(choices, key=lambda v: abs((point + v) - pacman))
 plan = best if random() > 0.2 else choice(choices)
+ ```
+⚡ Mayor velocidad de juego
+```python
+Antes:
 
+python
+# Actualización de movimiento cada 100ms
+ontimer(move, 100)
+Después:
 
-Fantasmas más rápidos
+python
+# Actualización de movimiento cada 60ms para aumentar la velocidad
+ontimer(move, 60)
+  ```
+    
 
-Se redujo el tiempo entre movimientos del juego de 100ms a 60ms usando ontimer(move, 60), haciendo que los fantasmas y Pacman se muevan más rápido y aumentando el nivel de dificultad.
-
-Posiciones iniciales seguras
-
-Se ajustaron las posiciones iniciales de los fantasmas para que aparezcan siempre dentro de los tiles válidos, evitando que algunos no aparecieran en el tablero.
-
-Tablero original y centrado
-
-Se mantuvo el tablero clásico, asegurando que los bordes no generen espacios sobrantes y que Pacman pueda recorrer todo el área disponible.
-
-La puntuación se mantiene visible y se actualiza dinámicamente al recolectar los puntos del tablero.
-
-Game Over
-
-Se añadió un mensaje centrado de “GAME OVER” cuando Pacman colisiona con un fantasma, mejorando la experiencia visual y de feedback para el jugador.
-
-En conjunto, estas modificaciones permiten que el juego sea más dinámico, desafiante y visualmente organizado, logrando una experiencia más entretenida tanto en Cannon como en Pacman.
 
 
 # 🎮 Juego Paint
